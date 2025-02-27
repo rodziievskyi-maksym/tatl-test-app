@@ -1,0 +1,24 @@
+name: tatl-local
+
+networks:
+  tatl-network:
+    driver: bridge
+
+services:
+  tatl-local-db:
+    image: mysql:latest
+    container_name: tatl-local-db
+    environment:
+      MYSQL_ROOT_PASSWORD: tatlroot
+      MYSQL_DATABASE: tatldb
+      MYSQL_USER: tatladmin
+      MYSQL_PASSWORD: tatlpass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      tatl-network:
+
+volumes:
+  mysql_data:
