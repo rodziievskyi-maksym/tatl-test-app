@@ -7,7 +7,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/recover"
 )
 
-type FiberHTTPServer struct {
+type HTTPServer struct {
 	app     *fiber.App
 	address string
 }
@@ -21,15 +21,14 @@ func NewApp() *fiber.App {
 	return app
 }
 
-func NewFiberHTTPServer(app *fiber.App, address string) FiberHTTPServer {
-
-	return FiberHTTPServer{
+func NewHTTPServer(app *fiber.App, address string) HTTPServer {
+	return HTTPServer{
 		app:     app,
 		address: address,
 	}
 }
 
-func (s FiberHTTPServer) Start() error {
+func (s HTTPServer) Start() error {
 	if err := s.app.Listen(s.address); err != nil {
 		return fmt.Errorf("failed to start HTTP server: %s", err.Error())
 	}

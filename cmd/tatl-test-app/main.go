@@ -4,8 +4,9 @@ import (
 	"flag"
 	"fmt"
 	"github.com/rodziievskyi-maksym/tatl-test-app/api"
+	authrepository "github.com/rodziievskyi-maksym/tatl-test-app/internal/auth/infrastructure/repository"
 	"github.com/rodziievskyi-maksym/tatl-test-app/internal/user/applicaton"
-	"github.com/rodziievskyi-maksym/tatl-test-app/internal/user/repository"
+	userrepository "github.com/rodziievskyi-maksym/tatl-test-app/internal/user/infrastructure/repository"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"log"
@@ -35,15 +36,14 @@ func main() {
 		log.Fatalf("Failed to establish database connection %s", err.Error())
 	}
 
-	userRepository := repository.NewUserRepository(db)
+	userRepository := userrepository.NewUserRepository(db)
 	userController := applicaton.NewUserController(userRepository)
 
-	httpServer := api.NewHTTPServer(*address, userController)
+	authRepository := authrepository.NewAuthRepository(db)
+
+	httpServer := api.NewHTTPServer(*address, userController, authRepository)
 
 	if err = httpServer.Start(); err != nil {
 		log.Fatalf("Failed to start HTTP server: %s", err.Error())
 	}
-
-	//create middleware file that checks header "Api-key" in auth table
-	//
 }
